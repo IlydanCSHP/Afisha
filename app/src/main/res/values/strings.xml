@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Afisha</string>
+    <string name="search_hint">Найти места, события...</string>
+    <string name="town_name">Молодечно</string>
+    <string name="main_subtitle">Афиша</string>
+    <string name="placeholder_text">placeholder</string>
+    <string name="lorem_ipsum">Qorem ipsum dolor sit amet,consectetur adipiscing elit.</string>
+    <string name="no_reviews_text">Отзывов пока нет</string>
+    <string name="empty_field_error">Все поля должны быть заполнены!</string>
+    <string name="invalid_sign_in">Неверный email или пароль</string>
 </resources>

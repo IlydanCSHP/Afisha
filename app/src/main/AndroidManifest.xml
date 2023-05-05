@@ -12,8 +12,16 @@
             android:theme="@style/Theme.Afisha"
             tools:targetApi="31">
         <activity
+                android:name=".ProfileActivity"
+                android:exported="false" />
+        <activity
+                android:name=".LoginActivity"
+                android:exported="false"
+                android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
                 android:name=".MainActivity"
-                android:exported="true">
+                android:exported="true"
+                android:windowSoftInputMode="stateVisible|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

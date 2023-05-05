@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_hint">Найти места, события...</string>
+    <string name="town_name">Молодечно</string>
+    <string name="placeholder_text">placeholder</string>
+    <string name="lorem_ipsum">Qorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+</resources>
