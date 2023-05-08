@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        tools:context=".EventActivity">
+
+    <include
+            layout="@layout/toolbar"
+            android:id="@+id/event_toolbar" />
+
+    <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_below="@id/event_toolbar"
+            android:layout_above="@id/ticket_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                    android:id="@+id/event_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/clear_background" />
+
+            <LinearLayout
+                    android:id="@+id/event_info"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="vertical"
+                    android:layout_below="@id/event_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:id="@+id/event_title"
+                        android:text="Название"
+                        style="@style/AfishaTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="16dp" />
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:background="@drawable/review_rating_background"
+                        android:layout_marginTop="16dp"
+                        android:padding="8dp"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:id="@+id/review_count"
+                            android:text="123 отзыва"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:textColor="@color/text_color"
+                            android:fontFamily="@font/rubik" />
+
+                    <TextView
+                            android:id="@+id/event_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/rate_icon"
+                            android:textColor="@color/text_color"
+                            android:fontFamily="@font/rubik"
+                            android:drawablePadding="8dp" />
+                </LinearLayout>
+
+                <TextView
+                        android:id="@+id/event_address"
+                        android:text="Адрес"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/rubik"
+                        android:textColor="@color/text_color" />
+
+                <TextView
+                        android:id="@+id/event_price"
+                        android:text="Стоимость"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:layout_marginTop="8dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/text_color" />
+
+                <TextView
+                        android:id="@+id/event_description"
+                        android:text="Описание"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/rubik"
+                        android:textColor="@color/text_color" />
+            </LinearLayout>
+
+            <LinearLayout
+                    android:id="@+id/review_title"
+                    android:layout_below="@id/event_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp">
+
+                <TextView
+                        android:textColor="@color/text_color"
+                        android:fontFamily="@font/rubik"
+                        android:textSize="16sp"
+                        android:text="Отзывы"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                <TextView
+                        android:id="@+id/add_review"
+                        android:layout_below="@id/event_info"
+                        android:textColor="@color/afisha_blue"
+                        android:fontFamily="@font/rubik"
+                        android:textSize="12sp"
+                        android:text="Оставить отзыв"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/review_recycler"
+                    android:layout_below="@+id/review_title"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+        </RelativeLayout>
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/ticket_button"
+            android:layout_alignParentBottom="true"
+            android:text="Заказать билет"
+            style="@style/AfishaButton"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+</RelativeLayout>

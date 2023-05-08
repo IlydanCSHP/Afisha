@@ -28,7 +28,10 @@ public class Review {
     private String reviewText;
 
     @ColumnInfo(name = "review_rating")
-    private Long reviewRating;
+    private Integer reviewRating;
+
+    @ColumnInfo(name = "review_date")
+    private String reviewDate;
 
     @ColumnInfo(name = "event_id")
     private Long eventId;
@@ -40,12 +43,24 @@ public class Review {
 
     }
 
-    public Review(Long id, String reviewText, Long reviewRating, Long eventId, Long userId) {
-        this.id = id;
+    public Review(String reviewText, String reviewDate, Long eventId, Long userId, Integer reviewRating) {
         this.reviewText = reviewText;
-        this.reviewRating = reviewRating;
+        this.reviewDate = reviewDate;
         this.eventId = eventId;
         this.userId = userId;
+        this.reviewRating = reviewRating;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", reviewText='" + reviewText + '\'' +
+                ", reviewRating=" + reviewRating +
+                ", reviewDate='" + reviewDate + '\'' +
+                ", eventId=" + eventId +
+                ", userId=" + userId +
+                '}';
     }
 
     public Long getId() {
@@ -64,11 +79,11 @@ public class Review {
         this.reviewText = reviewText;
     }
 
-    public Long getReviewRating() {
+    public Integer getReviewRating() {
         return reviewRating;
     }
 
-    public void setReviewRating(Long reviewRating) {
+    public void setReviewRating(Integer reviewRating) {
         this.reviewRating = reviewRating;
     }
 
@@ -86,5 +101,13 @@ public class Review {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getReviewDate() {
+        return reviewDate;
+    }
+
+    public void setReviewDate(String reviewDate) {
+        this.reviewDate = reviewDate;
     }
 }

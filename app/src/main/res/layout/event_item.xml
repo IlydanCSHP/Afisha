@@ -1,131 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/event_item_background"
+        android:background="@drawable/afisha_item_background"
         android:paddingBottom="16dp"
+        android:elevation="8dp"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp">
 
-    <TextView
-            android:text="Название"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:textColor="@color/text_color"
-            android:fontFamily="@font/rubik"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:id="@+id/event_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/event_image"
-            android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/rate_star" />
-
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/rate_icon"
-            android:id="@+id/rate_star"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/event_rating"
-            app:layout_constraintTop_toTopOf="@+id/event_title"
-            app:layout_constraintBottom_toBottomOf="@+id/event_title" />
-
-    <TextView
-            android:text="5,0"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:id="@+id/event_rating"
-            android:textSize="12sp"
-            android:textColor="@color/text_color_50"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/event_title"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/event_title"/>
-
-    <TextView
-            android:text="Описание"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textColor="@color/text_color"
-            android:id="@+id/event_description"
-            app:layout_constraintTop_toBottomOf="@+id/event_title"
-            app:layout_constraintStart_toStartOf="@+id/event_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="16dp" />
-
     <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/event_info"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/linearLayout"
-            android:background="@drawable/review_background"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/event_description"
-            android:layout_marginTop="16dp">
+            android:layout_marginEnd="16dp">
 
         <TextView
-                android:text="Отзыв"
+                android:id="@+id/event_title"
+                android:text="Название"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:layout_weight="1"
                 android:textColor="@color/text_color"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="8dp"
-                android:id="@+id/review_title" />
+                android:fontFamily="@font/rubik" />
 
         <TextView
-                android:text="@string/no_reviews_text"
                 android:layout_width="wrap_content"
+                android:layout_gravity="center"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:id="@+id/event_rating"
                 android:textSize="12sp"
-                android:textColor="@color/text_color_50"
-                android:id="@+id/event_review" />
+                android:drawablePadding="8dp"
+                android:textColor="@color/text_color_50"/>
 
     </LinearLayout>
 
-    <ImageView
-            android:layout_width="0dp"
-            app:layout_constraintHeight_max="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:id="@+id/event_image"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatButton
+    <TextView
+            android:id="@+id/event_description"
+            android:text="Описание"
+            android:layout_below="@+id/event_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_background"
-            android:textColor="@color/white"
-            android:textAllCaps="false"
-            android:text="Отзывы"
-            android:id="@+id/reviews_button"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/text_color" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/review_latest"
+            android:layout_below="@id/event_description"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    <LinearLayout
+            android:id="@+id/buttons_layout"
+            android:layout_below="@id/review_latest"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/bookmark_icon"
-            android:id="@+id/bookmark_button"
-            android:background="@android:color/transparent"
-            app:layout_constraintBottom_toBottomOf="@+id/reviews_button"
-            app:layout_constraintTop_toTopOf="@+id/reviews_button"
-            app:layout_constraintStart_toStartOf="@+id/linearLayout" />
+        <ImageButton
+                android:id="@+id/bookmark_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/bookmark_icon"
+                android:background="@android:color/transparent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/reviews_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/AfishaButton"
+                    android:text="Отзывы" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -8,13 +8,15 @@
     <color name="afisha_blue">#FF5E88C6</color>
     <color name="afisha_light_blue">#88AEE6</color>
     <color name="afisha_yellow">#FFF7DF45</color>
+    <color name="afisha_yellow_50">#80F7DF45</color>
     <color name="afisha_red">#FFD24C45</color>
     <color name="afisha_red_25">#40D24C45</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="filter_color">#FFFBE1</color>
     <color name="event_color">#FFF8F8</color>
     <color name="text_color">#172130</color>
     <color name="text_color_50">#80172130</color>
     <color name="review_background_color">#F3D5D5</color>
+    <color name="white_50">#80FFFFFF</color>
 </resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/afisha_item_background">
+
+    <TextView
+            android:id="@+id/dialog_title"
+            android:layout_marginTop="32dp"
+            android:text="Выйти из режима администратора?"
+            style="@style/AfishaTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    <LinearLayout
+            android:layout_marginTop="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialog_title">
+
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Закрыть"
+                android:layout_weight="0.33"
+                style="@style/AfishaButton" />
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.33" />
+
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/sign_out_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Выйти"
+                android:layout_weight="0.33"
+                style="@style/AfishaButton" />
+    </LinearLayout>
+</RelativeLayout>

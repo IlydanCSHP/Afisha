@@ -30,4 +30,7 @@ public interface EventDao {
 
     @Query("SELECT * FROM events")
     LiveData<List<Event>> getAll();
+
+    @Query("SELECT * FROM events WHERE event_title LIKE '%' || :title || '%'")
+    LiveData<List<Event>> findByTitle(String title);
 }

@@ -2,7 +2,6 @@ package com.diplom.afisha.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "events")
@@ -16,29 +15,23 @@ public class Event {
     @ColumnInfo(name = "event_description")
     private String description;
 
-//    @ColumnInfo(name = "event_image")
-//    private Byte[] image;
+    @ColumnInfo(name = "event_address")
+    private String address;
 
+    @ColumnInfo(name = "event_price")
+    private Double price;
     @ColumnInfo(name = "event_rating")
     private Double rating;
 
     public Event() {
 
     }
-
-    public Event(String title, String description, Double rating) {
+    public Event(String title, String description, String address, Double price) {
         this.title = title;
         this.description = description;
-        this.rating = rating;
+        this.address = address;
+        this.price = price;
     }
-
-//    public Event(String title, String description, Byte[] image, Double rating) {
-//        this.title = title;
-//        this.description = description;
-//        this.image = image;
-//        this.rating = rating;
-//    }
-
     public Long getId() {
         return id;
     }
@@ -62,15 +55,6 @@ public class Event {
     public void setDescription(String description) {
         this.description = description;
     }
-
-//    public Byte[] getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(Byte[] image) {
-//        this.image = image;
-//    }
-
     public Double getRating() {
         return rating;
     }
@@ -87,5 +71,21 @@ public class Event {
                 ", description='" + description + '\'' +
                 ", rating=" + rating +
                 '}';
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

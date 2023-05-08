@@ -80,7 +80,7 @@ public class RegisterFragment extends Fragment {
             errorMessage.setVisibility(View.GONE);
             errorMessage.setText("");
             users.add(user);
-            Toast.makeText(getActivity(), "Успешная регистрация!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Успешная регистрация! \nПерейдите во вкладку \"Вход\"", Toast.LENGTH_LONG).show();
         } else {
             errorMessage.setVisibility(View.VISIBLE);
             errorMessage.setText(R.string.empty_field_error);

@@ -2,18 +2,19 @@ package com.diplom.afisha;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.diplom.afisha.adapter.LoginViewPageAdapter;
+import com.diplom.afisha.adapter.AfishaViewPageAdapter;
 import com.diplom.afisha.dao.UserDao;
 import com.diplom.afisha.database.AfishaRoomDatabase;
 import com.diplom.afisha.model.User;
@@ -26,7 +27,8 @@ public class LoginActivity extends AppCompatActivity {
 
     ViewPager2 viewPager;
     TabLayout tabLayout;
-    LoginViewPageAdapter loginAdapter;
+    AfishaViewPageAdapter loginAdapter;
+    SharedPreferences sPref;
     static List<User> usersList;
 
     @Override
@@ -34,6 +36,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        sPref = getSharedPreferences("userInfo", MODE_PRIVATE);
+        if (sPref.getBoolean("isSignedIn", false)){
+            finish();
+        }
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.white));
 
         UserDao userDao = AfishaRoomDatabase.getInstance(this).userDao();
@@ -50,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
         viewPager = findViewById(R.id.view_pager);
         tabLayout = findViewById(R.id.tab_layout);
-        loginAdapter = new LoginViewPageAdapter(getSupportFragmentManager(), getLifecycle());
+        loginAdapter = new AfishaViewPageAdapter(getSupportFragmentManager(), getLifecycle());
         loginAdapter.addFragment(new SignInFragment(), "Вход");
         loginAdapter.addFragment(new RegisterFragment(), "Регистрация");
 
@@ -60,6 +66,9 @@ public class LoginActivity extends AppCompatActivity {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(loginAdapter.getPageTitle(position))).attach();
 
         ImageButton backButton = findViewById(R.id.back_button);
-        backButton.setOnClickListener(view -> onBackPressed());
+        backButton.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
     }
 }

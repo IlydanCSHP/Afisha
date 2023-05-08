@@ -25,7 +25,7 @@ public interface UserDao {
     @Update
     void update(User user);
 
-    @Query("SELECT * FROM users WHERE id == :id")
+    @Query("SELECT * FROM users WHERE id == :id LIMIT 1")
     User findById(long id);
 
     @Query("SELECT * FROM users")

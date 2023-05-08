@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/afisha_item_background">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:id="@+id/dialog_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Добавить событие"
+                style="@style/AfishaTitle"
+                android:layout_marginTop="32dp" />
+
+        <LinearLayout
+                android:id="@+id/event_inputs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/dialog_title"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="32dp">
+
+            <EditText
+                    android:id="@+id/event_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:hint="Название"
+                    android:layout_gravity="center"
+                    style="@style/AfishaInput" />
+
+            <EditText
+                    android:id="@+id/event_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:layout_marginTop="24dp"
+                    android:hint="Описание"
+                    android:layout_gravity="center"
+                    style="@style/AfishaInput" />
+
+            <EditText
+                    android:id="@+id/event_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:layout_marginTop="24dp"
+                    android:hint="Адрес"
+                    android:layout_gravity="center"
+                    style="@style/AfishaInput" />
+
+            <EditText
+                    android:id="@+id/event_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:layout_marginTop="24dp"
+                    android:hint="Стоимость"
+                    android:layout_gravity="center"
+                    style="@style/AfishaInput" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_marginTop="48dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="32dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/event_inputs">
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Закрыть"
+                    android:layout_weight="0.33"
+                    style="@style/AfishaButton" />
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.33" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/apply_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Добавить"
+                    android:layout_weight="0.33"
+                    style="@style/AfishaButton" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</ScrollView>

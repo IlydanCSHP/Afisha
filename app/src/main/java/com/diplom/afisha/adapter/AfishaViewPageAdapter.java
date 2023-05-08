@@ -9,11 +9,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginViewPageAdapter extends FragmentStateAdapter {
+public class AfishaViewPageAdapter extends FragmentStateAdapter {
     private final List<Fragment> fragmentList = new ArrayList<>();
     private final List<String> titleList = new ArrayList<>();
 
-    public LoginViewPageAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+    public AfishaViewPageAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
 
