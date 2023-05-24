@@ -46,6 +46,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
         getUser(holder, position);
         holder.ticketDate.setText(tickets.get(position).getTicketDate());
         holder.ticketTime.setText(tickets.get(position).getTicketTime());
+        holder.ticketNumber.setText("№" + tickets.get(position).getNumber());
     }
 
     @Override
@@ -57,6 +58,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
         TextView ticketUser;
         TextView ticketDate;
         TextView ticketTime;
+        TextView ticketNumber;
 
         public TicketViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +66,7 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.TicketView
             ticketUser = itemView.findViewById(R.id.ticket_user);
             ticketDate = itemView.findViewById(R.id.ticket_date);
             ticketTime = itemView.findViewById(R.id.ticket_time);
+            ticketNumber = itemView.findViewById(R.id.ticket_number);
 
             if (sPref.getBoolean("isAdmin", false)) {
                 itemView.setOnCreateContextMenuListener(this);

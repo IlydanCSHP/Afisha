@@ -23,15 +23,21 @@ public class Event {
     @ColumnInfo(name = "event_rating")
     private Double rating;
 
+    @ColumnInfo(name = "tickets_number")
+    private Integer ticketsNumber;
+
     public Event() {
 
     }
-    public Event(String title, String description, String address, Double price) {
+
+    public Event(String title, String description, String address, Double price, Integer ticketsNumber) {
         this.title = title;
         this.description = description;
         this.address = address;
         this.price = price;
+        this.ticketsNumber = ticketsNumber;
     }
+
     public Long getId() {
         return id;
     }
@@ -55,12 +61,21 @@ public class Event {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public Double getRating() {
         return rating;
     }
 
     public void setRating(Double rating) {
         this.rating = rating;
+    }
+
+    public Integer getTicketsNumber() {
+        return ticketsNumber;
+    }
+
+    public void setTicketsNumber(Integer ticketsNumber) {
+        this.ticketsNumber = ticketsNumber;
     }
 
     @Override

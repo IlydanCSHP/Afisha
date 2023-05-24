@@ -43,6 +43,15 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/ticket_date" />
 
+            <TextView
+                    android:text="Номер билета"
+                    android:fontFamily="@font/rubik"
+                    android:textColor="@color/text_color_50"
+                    android:layout_gravity="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ticket_number" />
+
         </LinearLayout>
     </LinearLayout>
 

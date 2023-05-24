@@ -190,15 +190,17 @@ public class MainActivity extends AppCompatActivity {
 
         cancelButton.setOnClickListener(v -> dialog.dismiss());
         applyButton.setOnClickListener(v -> {
-            EditText eventTitle, eventDescription, eventAddress, eventPrice;
+            EditText eventTitle, eventDescription, eventAddress, eventPrice, eventTickets;
             eventTitle = inflater.findViewById(R.id.event_title);
             eventDescription = inflater.findViewById(R.id.event_description);
             eventAddress = inflater.findViewById(R.id.event_address);
             eventPrice = inflater.findViewById(R.id.event_price);
+            eventTickets = inflater.findViewById(R.id.event_tickets);
             Event event = new Event(eventTitle.getText().toString(),
                     eventDescription.getText().toString(),
                     eventAddress.getText().toString(),
-                    Double.parseDouble(eventPrice.getText().toString()));
+                    Double.parseDouble(eventPrice.getText().toString()),
+                    Integer.parseInt(eventTickets.getText().toString()));
             addEvent(event);
             Toast.makeText(this, "Добавлено!", Toast.LENGTH_SHORT).show();
         });

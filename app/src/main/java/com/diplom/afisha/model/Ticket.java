@@ -3,6 +3,7 @@ package com.diplom.afisha.model;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(
@@ -22,7 +23,8 @@ import androidx.room.PrimaryKey;
                         onUpdate = ForeignKey.CASCADE,
                         onDelete = ForeignKey.CASCADE
                 )
-        }
+        },
+        indices = {@Index(value = {"user_id", "event_id"}, unique = true)}
 )
 public class Ticket {
     @PrimaryKey(autoGenerate = true)
@@ -32,6 +34,7 @@ public class Ticket {
     private Long eventId;
 
     @ColumnInfo(name = "user_id")
+
     private Long userId;
 
     @ColumnInfo(name = "ticket_date")
@@ -40,15 +43,19 @@ public class Ticket {
     @ColumnInfo(name = "ticket_time")
     private String ticketTime;
 
+    @ColumnInfo(name = "ticket_number")
+    private Integer number;
+
     public Ticket() {
 
     }
 
-    public Ticket(Long eventId, Long userId, String ticketDate, String ticketTime) {
+    public Ticket(Long eventId, Long userId, String ticketDate, String ticketTime, Integer number) {
         this.eventId = eventId;
         this.userId = userId;
         this.ticketDate = ticketDate;
         this.ticketTime = ticketTime;
+        this.number = number;
     }
 
     @Override
@@ -100,5 +107,13 @@ public class Ticket {
 
     public void setTicketTime(String ticketTime) {
         this.ticketTime = ticketTime;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 }

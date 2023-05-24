@@ -4,10 +4,9 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,8 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class EventActivity extends AppCompatActivity {
 
@@ -53,6 +51,7 @@ public class EventActivity extends AppCompatActivity {
     TextView eventAddress;
     TextView eventPrice;
     TextView addReviewButton;
+    TextView ticketNumber;
     RecyclerView reviewsRecycler;
     ReviewAdapter adapter;
     List<Review> reviewList;
@@ -111,6 +110,20 @@ public class EventActivity extends AppCompatActivity {
         startActivity(ticketsIntent);
     }
 
+    private void setTitle(TextView title) {
+        new Thread(() -> {
+            EventDao eventDao = AfishaRoomDatabase.getInstance(this).eventDao();
+            Long id = intent.getLongExtra("event_id", 0L);
+            Event event = eventDao.findById(id);
+            runOnUiThread(() -> {
+                if (event.getTicketsNumber() > 0)
+                    title.setText("Бронирование билетов\n(" + event.getTicketsNumber() + " осталось)");
+                else
+                    title.setText("Бронирование билетов\n(Билетов не осталось)");
+            });
+        }).start();
+    }
+
     private void showTicketDialog(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View inflater = LayoutInflater.from(this).inflate(R.layout.add_ticket_dialog, null);
@@ -121,6 +134,9 @@ public class EventActivity extends AppCompatActivity {
 
         DatePicker datePicker = inflater.findViewById(R.id.ticket_date);
         EditText ticketTime = inflater.findViewById(R.id.ticket_time);
+        TextView title = inflater.findViewById(R.id.dialog_title);
+        Event event = new Event();
+        setTitle(title);
 
         int year = datePicker.getYear();
         int month = datePicker.getMonth();
@@ -156,21 +172,50 @@ public class EventActivity extends AppCompatActivity {
         AppCompatButton cancelButton = inflater.findViewById(R.id.cancel_button);
         AppCompatButton applyButton = inflater.findViewById(R.id.apply_button);
         cancelButton.setOnClickListener(v -> dialog.dismiss());
-        applyButton.setOnClickListener(v -> addTicket(year, month, dayOfMonth, ticketTime));
+        applyButton.setOnClickListener(v -> {
+            if (ticketTime.getText().toString().isEmpty()) {
+                Toast.makeText(this, "ОШИБКА. Укажите время записи!", Toast.LENGTH_SHORT).show();
+            } else {
+                addTicket(year, month, dayOfMonth, ticketTime, title);
+            }
+        });
     }
 
-    private void addTicket(int year, int month, int dayOfMonth, EditText ticketTime) {
+    private void addTicket(int year, int month, int dayOfMonth, EditText ticketTime, TextView title) {
         new Thread(() -> {
-            TicketDao ticketDao = AfishaRoomDatabase.getInstance(this).ticketDao();
-            SharedPreferences sPref = getSharedPreferences("userInfo", MODE_PRIVATE);
-            String ticketDate = dayOfMonth + "." + month + "." + year;
-            Ticket ticket = new Ticket(intent.getLongExtra("event_id", 0L),
-                    sPref.getLong("uid", 0L),
-                    ticketDate, ticketTime.getText().toString());
-            ticketDao.insert(ticket);
-            runOnUiThread(() -> {
-                Toast.makeText(this, "Забронированно!", Toast.LENGTH_SHORT).show();
-            });
+            try {
+                TicketDao ticketDao = AfishaRoomDatabase.getInstance(this).ticketDao();
+                EventDao eventDao = AfishaRoomDatabase.getInstance(this).eventDao();
+                Event event = eventDao.findById(intent.getLongExtra("event_id", 0L));
+                Log.d(TAG, "addTicket: " + ticketDao.getAll());
+                if (event.getTicketsNumber() > 0) {
+                    SharedPreferences sPref = getSharedPreferences("userInfo", MODE_PRIVATE);
+                    Integer ticketNumber = (new Random()).nextInt(900000) + 100000;
+                    String ticketDate = dayOfMonth + "." + month + "." + year;
+                    Ticket ticket = new Ticket(intent.getLongExtra("event_id", 0L),
+                            sPref.getLong("uid", 0L),
+                            ticketDate, ticketTime.getText().toString(),
+                            ticketNumber);
+
+                    ticketDao.insert(ticket);
+                    event.setTicketsNumber(event.getTicketsNumber() - 1);
+                    eventDao.update(event);
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Забронированно успшено!", Toast.LENGTH_SHORT).show();
+                        setTitle(title);
+                        setEventInfo();
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "ОШИБКА. Билетов не осталось!", Toast.LENGTH_SHORT).show();
+                        setTitle(title);
+                    });
+                }
+            } catch (SQLiteConstraintException e) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "ОШИБКА. Вы уже забронировали билет!", Toast.LENGTH_SHORT).show();
+                });
+            }
         }).start();
     }
 
@@ -310,20 +355,32 @@ public class EventActivity extends AppCompatActivity {
         eventDescription = findViewById(R.id.event_description);
         eventAddress = findViewById(R.id.event_address);
         eventPrice = findViewById(R.id.event_price);
+        ticketNumber = findViewById(R.id.ticket_number);
+        SharedPreferences sPref = getSharedPreferences("userInfo", MODE_PRIVATE);
 
         eventTitle.setText(intent.getStringExtra("event_title"));
         new Thread(() -> {
             ReviewDao reviewDao = AfishaRoomDatabase.getInstance(this).reviewDao();
             EventDao eventDao = AfishaRoomDatabase.getInstance(this).eventDao();
+            TicketDao ticketDao = AfishaRoomDatabase.getInstance(this).ticketDao();
             List<Review> reviews = reviewDao.findByEventId(intent.getLongExtra("event_id", 0L));
             Double rating = reviewDao.getEventRating(intent.getLongExtra("event_id", 0L));
             Event event = eventDao.findById(intent.getLongExtra("event_id", 0L));
+            Ticket ticket = ticketDao.findByUserEvent(intent.getLongExtra("event_id", 0L), sPref.getLong("uid", 0L));
+            Log.d(TAG, "setEventInfo: " + sPref.getLong("uid", 0L) + intent.getLongExtra("event_id", 0L));
+            Log.d(TAG, "setEventInfo: " + ticket);
             runOnUiThread(() -> {
                 reviewCount.setText("Отзывов: " + reviews.size());
                 eventAddress.setText("Адрес: " + event.getAddress());
                 eventPrice.setText("Цена: " + event.getPrice());
+
                 if (rating != null) {
                     eventRating.setText(String.format("%.1f", rating));
+                }
+                if (sPref.getBoolean("isSignedIn", false) && ticket != null) {
+                    Log.d(TAG, "setEventInfo: " + ticket);
+                    ticketNumber.setVisibility(View.VISIBLE);
+                    ticketNumber.setText("Номер билета: №" + ticket.getNumber());
                 }
             });
         }).start();

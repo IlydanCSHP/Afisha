@@ -15,7 +15,7 @@ import com.diplom.afisha.model.Review;
 import com.diplom.afisha.model.Ticket;
 import com.diplom.afisha.model.User;
 
-@Database(entities = {User.class, Event.class, Review.class, Ticket.class}, version = 6)
+@Database(entities = {User.class, Event.class, Review.class, Ticket.class}, version = 11)
 public abstract class AfishaRoomDatabase extends RoomDatabase {
     public abstract EventDao eventDao();
 

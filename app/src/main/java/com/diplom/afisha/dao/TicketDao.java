@@ -32,4 +32,7 @@ public interface TicketDao {
     LiveData<List<Ticket>> findByEventId(Long eventId);
     @Query("SELECT * FROM tickets WHERE id == :id LIMIT 1")
     Ticket findById(Long id);
+
+    @Query("SELECT * FROM tickets WHERE event_id == :eventId AND user_id == :userId LIMIT 1")
+    Ticket findByUserEvent(Long eventId, Long userId);
 }

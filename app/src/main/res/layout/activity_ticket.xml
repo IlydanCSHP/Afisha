@@ -11,9 +11,18 @@
             layout="@layout/toolbar"
             android:id="@+id/ticket_toolbar" />
 
+    <TextView
+            android:id="@+id/ticket_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ticket_toolbar"
+            android:layout_marginTop="32dp"
+            style="@style/AfishaTitle"
+            android:text="Список билетов для этого события" />
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tickets_recycler"
-            android:layout_below="@id/ticket_toolbar"
+            android:layout_below="@id/ticket_title"
             android:layout_marginTop="32dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
