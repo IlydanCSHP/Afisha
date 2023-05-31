@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.diplom.afisha.enums.EventType;
 import com.diplom.afisha.model.Event;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public interface EventDao {
 
     @Query("SELECT * FROM events WHERE id == :id LIMIT 1")
     Event findById(long id);
+
+    @Query("SELECT * FROM events WHERE event_type == :type")
+    List<Event> findByType(EventType type);
 
     @Query("SELECT * FROM events")
     LiveData<List<Event>> getAll();

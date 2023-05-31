@@ -18,7 +18,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     <RelativeLayout
             android:layout_width="match_parent"
@@ -108,7 +108,6 @@
         <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_marginTop="24dp"
                 app:srcCompat="@drawable/cancel_filter_icon"
                 android:background="@drawable/filter_background"
@@ -116,25 +115,35 @@
                 android:elevation="4dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:id="@+id/filters_cancel"/>
+                android:id="@+id/filters_cancel" />
 
         <androidx.recyclerview.widget.RecyclerView
-                android:visibility="gone"
+                android:id="@+id/filters_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 tools:itemCount="1"
-                android:id="@+id/filters_recycler"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal" />
 
     </LinearLayout>
+
+    <TextView
+            android:id="@+id/empty_result"
+            android:text="Ничего не найдено..."
+            style="@style/AfishaTitle"
+            android:visibility="gone"
+            android:layout_marginTop="48dp"
+            android:textColor="@color/text_color_50"
+            android:layout_below="@id/filters_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/event_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="32dp"
-            android:layout_below="@+id/filters_layout"/>
+            android:layout_below="@+id/filters_layout" />
 
 
 </RelativeLayout>

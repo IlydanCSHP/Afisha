@@ -22,8 +22,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.diplom.afisha.adapter.EventAdapter;
@@ -31,6 +34,7 @@ import com.diplom.afisha.adapter.FilterAdapter;
 import com.diplom.afisha.dao.EventDao;
 import com.diplom.afisha.dao.TicketDao;
 import com.diplom.afisha.database.AfishaRoomDatabase;
+import com.diplom.afisha.enums.EventType;
 import com.diplom.afisha.model.Event;
 import com.diplom.afisha.model.Filter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     LiveData<List<Event>> events;
     FloatingActionButton addEventButton;
     EditText searchBox;
+    TextView emptyResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +64,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.white));
         sPref = getSharedPreferences("userInfo", MODE_PRIVATE);
+        emptyResult = findViewById(R.id.empty_result);
         getAllEvents();
 
         setFilters();
+
 
         addEventButton = findViewById(R.id.add_event_button);
         if (sPref.getBoolean("isAdmin", false)) {
@@ -93,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         getAllTickets();
+
+        ImageButton cancelFiltersButton = findViewById(R.id.filters_cancel);
+        cancelFiltersButton.setOnClickListener(v -> {
+            getAllEvents();
+            searchBox.setText("");
+        });
     }
 
     @Override
@@ -160,8 +173,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Event> events) {
                 eventList = events;
-                eventAdapter = new EventAdapter(MainActivity.this, eventList, MainActivity.this);
-                eventRecycler.setAdapter(eventAdapter);
+                setEventsRecycler();
             }
         });
     }
@@ -181,6 +193,11 @@ public class MainActivity extends AppCompatActivity {
         View inflater = LayoutInflater.from(this).inflate(R.layout.add_event_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setView(inflater);
+
+        Spinner eventType = inflater.findViewById(R.id.event_type);
+        ArrayAdapter<EventType> adapter = new ArrayAdapter<>(this, R.layout.event_type_item, EventType.values());
+        eventType.setAdapter(adapter);
+
         AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.show();
@@ -200,10 +217,35 @@ public class MainActivity extends AppCompatActivity {
                     eventDescription.getText().toString(),
                     eventAddress.getText().toString(),
                     Double.parseDouble(eventPrice.getText().toString()),
-                    Integer.parseInt(eventTickets.getText().toString()));
+                    Integer.parseInt(eventTickets.getText().toString()),
+                    (EventType) eventType.getSelectedItem()
+            );
             addEvent(event);
             Toast.makeText(this, "Добавлено!", Toast.LENGTH_SHORT).show();
         });
+    }
+
+    public void filterEvents(EventType type) {
+        new Thread(() -> {
+            eventList = getFilteredEvents(type);
+            runOnUiThread(() -> {
+                if (eventList.size() == 0) {
+                    emptyResult.setVisibility(View.VISIBLE);
+                    eventRecycler.setVisibility(View.GONE);
+                } else {
+                    eventAdapter = new EventAdapter(this, eventList, this);
+                    eventRecycler.setAdapter(eventAdapter);
+                    eventRecycler.setVisibility(View.VISIBLE);
+                    emptyResult.setVisibility(View.GONE);
+                }
+
+            });
+        }).start();
+    }
+
+    private List<Event> getFilteredEvents(EventType type) {
+        EventDao dao = AfishaRoomDatabase.getInstance(this).eventDao();
+        return dao.findByType(type);
     }
 
     private void addEvent(Event event) {
@@ -247,26 +289,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setEventsRecycler() {
-        eventRecycler = findViewById(R.id.event_recycler);
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
-        eventRecycler.setLayoutManager(manager);
-    }
-
     private void setFiltersRecycler() {
         filtersRecycler = findViewById(R.id.filters_recycler);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         filtersRecycler.setLayoutManager(manager);
-        filterAdapter = new FilterAdapter(this, filters);
+        filterAdapter = new FilterAdapter(this, filters, this);
         filtersRecycler.setAdapter(filterAdapter);
     }
 
     private void setFilters() {
         filters = new ArrayList<>();
-        filters.add(new Filter(1L, "Кино"));
-        filters.add(new Filter(2L, "Театры"));
-        filters.add(new Filter(3L, "Кафе"));
-        filters.add(new Filter(4L, "Концерты"));
+        filters.add(new Filter(EventType.Кино));
+        filters.add(new Filter(EventType.Концерт));
+        filters.add(new Filter(EventType.Спектакль));
+        filters.add(new Filter(EventType.Выставка));
+        filters.add(new Filter(EventType.Экскурсия));
+        filters.add(new Filter(EventType.Фестиваль));
     }
 
     private void getAllEvents() {
@@ -277,11 +315,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Event> events) {
                 eventList = events;
-                eventAdapter = new EventAdapter(MainActivity.this, eventList, MainActivity.this);
-                eventRecycler.setAdapter(eventAdapter);
+                setEventsRecycler();
                 Log.d(TAG, "onChanged: " + events);
             }
         });
+    }
+
+    private void setEventsRecycler() {
+        eventRecycler = findViewById(R.id.event_recycler);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
+        eventRecycler.setLayoutManager(manager);
+        eventAdapter = new EventAdapter(MainActivity.this, eventList, MainActivity.this);
+        eventRecycler.setAdapter(eventAdapter);
+        eventRecycler.setVisibility(View.VISIBLE);
+        emptyResult.setVisibility(View.GONE);
     }
 
     private void getAllTickets() {

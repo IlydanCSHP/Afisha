@@ -37,8 +37,8 @@ public interface ReviewDao {
     @Query("SELECT AVG(review_rating) FROM reviews WHERE event_id == :eventId")
     Double getEventRating(Long eventId);
 
-    @Query("SELECT * FROM reviews GROUP BY id HAVING id = MAX(id)")
-    Review getLatestReview();
+    @Query("SELECT * FROM reviews WHERE event_id == :eventId GROUP BY id HAVING id = MAX(id) LIMIT 1")
+    Review getLatestReview(Long eventId);
     @Query("SELECT * FROM reviews")
     LiveData<List<Review>> getAll();
 }

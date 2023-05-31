@@ -1,31 +1,23 @@
 package com.diplom.afisha.model;
 
+import com.diplom.afisha.enums.EventType;
+
 public class Filter {
-    private Long id;
-    private String name;
+    private EventType type;
 
-    public Filter(){
+    public Filter() {
 
     }
 
-    public Filter(Long id, String name) {
-        this.id = id;
-        this.name = name;
+    public Filter(EventType type) {
+        this.type = type;
     }
 
-    public Long getId() {
-        return id;
+    public EventType getType() {
+        return type;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setType(EventType type) {
+        this.type = type;
     }
 }

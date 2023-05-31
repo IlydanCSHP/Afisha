@@ -73,27 +73,23 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
         RecyclerView.LayoutManager manager = new LinearLayoutManager(context);
         holder.reviewRecycler.setLayoutManager(manager);
-        reviewAdapter = new ReviewAdapter(context, reviews, activity, false);
         new Thread(() -> {
             reviewDao = AfishaRoomDatabase.getInstance(context).reviewDao();
             reviews = reviewDao.findByEventId(events.get(position).getId());
             eventRating = reviewDao.getEventRating(events.get(position).getId());
-            review = reviewDao.getLatestReview();
+            if (reviews.size() > 0) {
+                review = reviews.get(reviews.size() - 1);
+            }
+            Log.d(TAG, "onBindViewHolder: " + review);
             if (review == null) {
                 review = new Review("", "", events.get(position).getId(), 0L, null);
             }
             reviews.clear();
             reviews.add(review);
-            activity.runOnUiThread(() -> {
-                if (eventRating != null) {
-                    holder.eventRating.setText(String.format("%.1f", eventRating));
-                    holder.eventRating.setCompoundDrawablesWithIntrinsicBounds(
-                            AppCompatResources.getDrawable(context, R.drawable.rate_icon),
-                            null, null, null);
-                    reviewAdapter = new ReviewAdapter(context, reviews, activity, false);
-                    holder.reviewRecycler.setAdapter(reviewAdapter);
-                }
-            });
+            if (eventRating != null) {
+                Log.d(TAG, "onBindViewHolder: " + reviews);
+                setLatestReview(holder);
+            }
         }).start();
         holder.itemView.setOnClickListener(view -> {
             openReviews(holder, position);
@@ -126,6 +122,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             });
         }
 
+    }
+
+    private void setLatestReview(@NonNull EventViewHolder holder) {
+        holder.eventRating.setText(String.format("%.1f", eventRating));
+        holder.eventRating.setCompoundDrawablesWithIntrinsicBounds(
+                AppCompatResources.getDrawable(context, R.drawable.rate_icon),
+                null, null, null);
+        reviewAdapter = new ReviewAdapter(context, reviews, activity, false);
+        holder.reviewRecycler.setAdapter(reviewAdapter);
     }
 
     private void openReviews(@NonNull EventViewHolder holder, int position) {

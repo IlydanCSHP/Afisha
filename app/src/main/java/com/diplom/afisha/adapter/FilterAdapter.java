@@ -1,5 +1,6 @@
 package com.diplom.afisha.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.diplom.afisha.MainActivity;
 import com.diplom.afisha.R;
 import com.diplom.afisha.model.Filter;
 
@@ -18,10 +20,12 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
 
     Context context;
     List<Filter> filters;
+    Activity activity;
 
-    public FilterAdapter(Context context, List<Filter> filters) {
+    public FilterAdapter(Context context, List<Filter> filters, Activity activity) {
         this.context = context;
         this.filters = filters;
+        this.activity = activity;
     }
 
     @NonNull
@@ -34,7 +38,12 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
 
     @Override
     public void onBindViewHolder(@NonNull FilterViewHolder holder, int position) {
-        holder.filterName.setText(filters.get(position).getName());
+        holder.filterName.setText(filters.get(position).getType().toString());
+
+        holder.itemView.setOnClickListener(v -> {
+            MainActivity mainActivity = (MainActivity) activity;
+            mainActivity.filterEvents(filters.get(position).getType());
+        });
     }
 
     @Override
@@ -42,9 +51,10 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.FilterView
         return filters.size();
     }
 
-    public static class FilterViewHolder extends RecyclerView.ViewHolder{
+    public static class FilterViewHolder extends RecyclerView.ViewHolder {
 
         TextView filterName;
+
         public FilterViewHolder(@NonNull View itemView) {
             super(itemView);
 

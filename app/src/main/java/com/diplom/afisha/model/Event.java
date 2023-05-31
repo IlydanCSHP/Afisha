@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.diplom.afisha.enums.EventType;
+
 @Entity(tableName = "events")
 public class Event {
     @PrimaryKey(autoGenerate = true)
@@ -20,22 +22,27 @@ public class Event {
 
     @ColumnInfo(name = "event_price")
     private Double price;
+
     @ColumnInfo(name = "event_rating")
     private Double rating;
 
     @ColumnInfo(name = "tickets_number")
     private Integer ticketsNumber;
 
+    @ColumnInfo(name = "event_type")
+    private EventType type;
+
     public Event() {
 
     }
 
-    public Event(String title, String description, String address, Double price, Integer ticketsNumber) {
+    public Event(String title, String description, String address, Double price, Integer ticketsNumber, EventType type) {
         this.title = title;
         this.description = description;
         this.address = address;
         this.price = price;
         this.ticketsNumber = ticketsNumber;
+        this.type = type;
     }
 
     public Long getId() {
@@ -62,6 +69,22 @@ public class Event {
         this.description = description;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     public Double getRating() {
         return rating;
     }
@@ -78,29 +101,11 @@ public class Event {
         this.ticketsNumber = ticketsNumber;
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", rating=" + rating +
-                '}';
+    public EventType getType() {
+        return type;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setType(EventType type) {
+        this.type = type;
     }
 }
