@@ -39,6 +39,12 @@ public interface ReviewDao {
 
     @Query("SELECT * FROM reviews WHERE event_id == :eventId GROUP BY id HAVING id = MAX(id) LIMIT 1")
     Review getLatestReview(Long eventId);
+
     @Query("SELECT * FROM reviews")
     LiveData<List<Review>> getAll();
+
+    @Query("SELECT * FROM reviews ORDER BY "
+            + "CASE WHEN :isAsc = 1 THEN review_rating END ASC, "
+            + "CASE WHEN :isAsc = 0 THEN review_rating END DESC")
+    List<Review> getAllSortedByRating(boolean isAsc);
 }

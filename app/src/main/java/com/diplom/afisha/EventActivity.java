@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,7 +61,8 @@ public class EventActivity extends AppCompatActivity {
     Integer rate = 0;
     Intent intent;
     AppCompatButton ticketButton;
-    EditText searchBox;
+    TextView descending;
+    TextView ascending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +83,37 @@ public class EventActivity extends AppCompatActivity {
         } else {
             ticketButton.setOnClickListener(view -> Toast.makeText(this, "Войдите чтобы заказать билет", Toast.LENGTH_SHORT).show());
         }
+        setSort();
         getReviews();
         setEventInfo();
         setReviewsRecycler();
+    }
+
+    private void setSort() {
+        descending = findViewById(R.id.descending);
+        ascending = findViewById(R.id.ascending);
+
+        descending.setOnClickListener(v -> {
+            sortReviews(false);
+            descending.setTextColor(ContextCompat.getColor(this, R.color.text_color));
+            ascending.setTextColor(ContextCompat.getColor(this, R.color.text_color_50));
+        });
+        ascending.setOnClickListener(v -> {
+            sortReviews(true);
+            ascending.setTextColor(ContextCompat.getColor(this, R.color.text_color));
+            descending.setTextColor(ContextCompat.getColor(this, R.color.text_color_50));
+        });
+    }
+
+    private void sortReviews(boolean isAsc) {
+        new Thread(() -> {
+            ReviewDao reviewDao = AfishaRoomDatabase.getInstance(this).reviewDao();
+            reviewList = reviewDao.getAllSortedByRating(isAsc);
+
+            runOnUiThread(() -> {
+               setReviewsRecycler();
+            });
+        }).start();
     }
 
     @Override
@@ -275,9 +306,7 @@ public class EventActivity extends AppCompatActivity {
             reviewList = reviewDao.findByEventId(intent.getLongExtra("event_id", 0));
             runOnUiThread(() -> {
                 if (reviewList != null) {
-                    Log.d(TAG, "getReviews: " + reviewList);
-                    adapter = new ReviewAdapter(this, reviewList, EventActivity.this, false);
-                    reviewsRecycler.setAdapter(adapter);
+                    setReviewsRecycler();
                 }
             });
         }).start();
@@ -340,7 +369,6 @@ public class EventActivity extends AppCompatActivity {
     }
 
     private void setReviewsRecycler() {
-
         reviewsRecycler = findViewById(R.id.review_recycler);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
         reviewsRecycler.setLayoutManager(manager);
@@ -372,11 +400,14 @@ public class EventActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 reviewCount.setText("Отзывов: " + reviews.size());
                 eventAddress.setText("Адрес: " + event.getAddress());
-                eventPrice.setText("Цена: " + event.getPrice());
+                eventPrice.setText("Цена: " + event.getPrice() + " руб.");
 
                 if (rating != null) {
                     eventRating.setText(String.format("%.1f", rating));
+                } else {
+                    eventRating.setText("Нет оценки");
                 }
+
                 if (sPref.getBoolean("isSignedIn", false) && ticket != null) {
                     Log.d(TAG, "setEventInfo: " + ticket);
                     ticketNumber.setVisibility(View.VISIBLE);

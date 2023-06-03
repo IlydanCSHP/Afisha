@@ -30,4 +30,7 @@ public interface UserDao {
 
     @Query("SELECT * FROM users")
     LiveData<List<User>> getAllLive();
+
+    @Query("SELECT * FROM users")
+    List<User> getAll();
 }

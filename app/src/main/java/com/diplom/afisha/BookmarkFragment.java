@@ -50,8 +50,7 @@ public class BookmarkFragment extends Fragment {
         new Thread(() -> {
             EventDao eventDao = AfishaRoomDatabase.getInstance(getActivity()).eventDao();
             SharedPreferences sPref = getActivity().getSharedPreferences("bookmarked_events", Context.MODE_PRIVATE);
-            Log.d(TAG, "getBookmarkedEvents: " + sPref.getAll().entrySet());
-            Log.d(TAG, "getBookmarkedEvents: " + sPref.getLong("event_id_1", 0L));
+
             for (Map.Entry<String, ?> entry : sPref.getAll().entrySet()) {
                 Event event = eventDao.findById((long) entry.getValue());
                 Log.d(TAG, "getBookmarkedEvents: " + event);

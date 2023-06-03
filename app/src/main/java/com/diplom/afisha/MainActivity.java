@@ -33,6 +33,7 @@ import com.diplom.afisha.adapter.EventAdapter;
 import com.diplom.afisha.adapter.FilterAdapter;
 import com.diplom.afisha.dao.EventDao;
 import com.diplom.afisha.dao.TicketDao;
+import com.diplom.afisha.dao.UserDao;
 import com.diplom.afisha.database.AfishaRoomDatabase;
 import com.diplom.afisha.enums.EventType;
 import com.diplom.afisha.model.Event;
@@ -69,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
         setFilters();
 
-
         addEventButton = findViewById(R.id.add_event_button);
         if (sPref.getBoolean("isAdmin", false)) {
             addEventButton.setVisibility(View.VISIBLE);
@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         profileButton.setOnClickListener(view -> openLogin(view));
 
         setFiltersRecycler();
+
 
         setEventsRecycler();
         searchBox = findViewById(R.id.search_field);
@@ -196,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
         Spinner eventType = inflater.findViewById(R.id.event_type);
         ArrayAdapter<EventType> adapter = new ArrayAdapter<>(this, R.layout.event_type_item, EventType.values());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         eventType.setAdapter(adapter);
 
         AlertDialog dialog = builder.create();
@@ -213,15 +215,23 @@ public class MainActivity extends AppCompatActivity {
             eventAddress = inflater.findViewById(R.id.event_address);
             eventPrice = inflater.findViewById(R.id.event_price);
             eventTickets = inflater.findViewById(R.id.event_tickets);
-            Event event = new Event(eventTitle.getText().toString(),
-                    eventDescription.getText().toString(),
-                    eventAddress.getText().toString(),
-                    Double.parseDouble(eventPrice.getText().toString()),
-                    Integer.parseInt(eventTickets.getText().toString()),
-                    (EventType) eventType.getSelectedItem()
-            );
-            addEvent(event);
-            Toast.makeText(this, "Добавлено!", Toast.LENGTH_SHORT).show();
+            if (!eventTickets.getText().toString().isEmpty()
+                    && !eventDescription.getText().toString().isEmpty()
+                    && !eventAddress.getText().toString().isEmpty()
+                    && !eventPrice.getText().toString().isEmpty()
+                    && !eventTickets.getText().toString().isEmpty()) {
+                Event event = new Event(eventTitle.getText().toString(),
+                        eventDescription.getText().toString(),
+                        eventAddress.getText().toString(),
+                        Double.parseDouble(eventPrice.getText().toString()),
+                        Integer.parseInt(eventTickets.getText().toString()),
+                        (EventType) eventType.getSelectedItem()
+                );
+                addEvent(event);
+                Toast.makeText(this, "Добавлено!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Заполните все поля!", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -315,7 +325,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Event> events) {
                 eventList = events;
-                setEventsRecycler();
+                runOnUiThread(() -> {
+                    setEventsRecycler();
+                });
                 Log.d(TAG, "onChanged: " + events);
             }
         });

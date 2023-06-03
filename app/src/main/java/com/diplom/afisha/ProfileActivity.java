@@ -59,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
         ed.apply();
         Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void goToMain(View view) {

@@ -1,8 +1,11 @@
 package com.diplom.afisha.adapter;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,23 +62,21 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
             new Thread(() -> {
                 EventDao eventDao = AfishaRoomDatabase.getInstance(context).eventDao();
                 event = eventDao.findById(reviews.get(position).getEventId());
-                activity.runOnUiThread(() -> {
-                    holder.reviewUser.setText(event.getTitle());
-                });
+                setReviewTitle(holder, event.getTitle());
             }).start();
         } else {
             new Thread(() -> {
                 UserDao userDao = AfishaRoomDatabase.getInstance(context).userDao();
                 user = userDao.findById(reviews.get(position).getUserId());
-                activity.runOnUiThread(() -> {
-                    if (user != null) {
-                        holder.reviewUser.setText(user.getUsername());
-                    } else {
-                        holder.reviewUser.setText("Отзывов пока нет");
-                    }
-                });
+                setReviewTitle(holder, user.getUsername());
             }).start();
         }
+    }
+
+    private void setReviewTitle(@NonNull ReviewViewHolder holder, String user) {
+        activity.runOnUiThread(() -> {
+            holder.reviewUser.setText(user);
+        });
     }
 
     @Override

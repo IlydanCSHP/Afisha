@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +31,7 @@ public class TicketActivity extends AppCompatActivity {
     List<Ticket> ticketList;
     LiveData<List<Ticket>> ticketsLive;
     Intent intent;
+    TextView noTickets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,7 @@ public class TicketActivity extends AppCompatActivity {
 
         intent = getIntent();
         ticketsRecycler = findViewById(R.id.tickets_recycler);
+        noTickets = findViewById(R.id.no_tickets);
         Log.d(TAG, "onCreate: " + ticketsRecycler);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
         ticketsRecycler.setLayoutManager(manager);
@@ -72,8 +76,15 @@ public class TicketActivity extends AppCompatActivity {
 
         ticketsLive.observe(this, tickets -> {
             ticketList = tickets;
-            ticketAdapter = new TicketAdapter(TicketActivity.this, ticketList, TicketActivity.this);
-            ticketsRecycler.setAdapter(ticketAdapter);
+            if (ticketList.size() == 0) {
+                noTickets.setVisibility(View.VISIBLE);
+                ticketsRecycler.setVisibility(View.GONE);
+            } else {
+                ticketAdapter = new TicketAdapter(TicketActivity.this, ticketList, TicketActivity.this);
+                ticketsRecycler.setAdapter(ticketAdapter);
+                ticketsRecycler.setVisibility(View.VISIBLE);
+                noTickets.setVisibility(View.GONE);
+            }
         });
     }
 }

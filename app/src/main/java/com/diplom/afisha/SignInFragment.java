@@ -56,7 +56,6 @@ public class SignInFragment extends Fragment {
     private void loginUser(View view) {
         users = LoginActivity.usersList;
 
-
         if (loginEmail.getText().toString().equals("admin") && loginPassword.getText().toString().equals("admin")) {
             sPref = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
             SharedPreferences.Editor ed = sPref.edit();
@@ -71,12 +70,7 @@ public class SignInFragment extends Fragment {
         } else {
             for (User user : users) {
                 if (user.getEmail().equals(loginEmail.getText().toString()) && user.getPassword().equals(loginPassword.getText().toString())) {
-                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                    getActivity().startActivity(intent);
                     errorMessage.setVisibility(View.GONE);
-                    errorMessage.setText("");
-                    loginEmail.setText("");
-                    loginPassword.setText("");
                     sPref = getActivity().getSharedPreferences("userInfo", Context.MODE_PRIVATE);
                     SharedPreferences.Editor ed = sPref.edit();
                     ed.putBoolean("isSignedIn", true);
@@ -85,15 +79,18 @@ public class SignInFragment extends Fragment {
                     ed.putString("phone", user.getPhone());
                     ed.putLong("uid", user.getId());
                     ed.apply();
-                    Toast.makeText(getActivity(), "Успешный вход!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                    getActivity().startActivity(intent);
+                    getActivity().finish();
                     break;
-                } else if (loginEmail.getText().length() <= 0 || loginPassword.getText().length() <= 0) {
-                    errorMessage.setVisibility(View.VISIBLE);
-                    errorMessage.setText(R.string.empty_field_error);
                 } else {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText(R.string.invalid_sign_in);
                 }
+            }
+            if (loginEmail.getText().toString().isEmpty() || loginPassword.getText().toString().isEmpty()) {
+                errorMessage.setVisibility(View.VISIBLE);
+                errorMessage.setText(R.string.empty_field_error);
             }
         }
     }

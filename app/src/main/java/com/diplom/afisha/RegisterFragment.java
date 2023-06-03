@@ -111,10 +111,10 @@ public class RegisterFragment extends Fragment {
                 Toast.makeText(getActivity(),
                         "Успешная регистрация!" +
                                 " \nПерейдите во вкладку \"Вход\"", Toast.LENGTH_LONG).show();
-            } else if (!isValidEmail(registerEmail.getText().toString())){
+            } else if (!isValidEmail(registerEmail.getText().toString())) {
                 errorMessage.setVisibility(View.VISIBLE);
                 errorMessage.setText(R.string.invalid_email_error);
-            } else if (!registerPassword.getText().toString().equals(confirmPassword.getText().toString())){
+            } else if (!registerPassword.getText().toString().equals(confirmPassword.getText().toString())) {
                 errorMessage.setVisibility(View.VISIBLE);
                 errorMessage.setText(R.string.not_maching_error);
             }

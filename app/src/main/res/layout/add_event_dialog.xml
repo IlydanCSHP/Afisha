@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:layout_marginTop="24dp"
-                    android:hint="Стоимость"
+                    android:hint="Стоимость (руб.)"
                     android:layout_gravity="center"
                     style="@style/AfishaInput" />
 

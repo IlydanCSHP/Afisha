@@ -20,6 +20,17 @@
             style="@style/AfishaTitle"
             android:text="Список билетов для этого события" />
 
+    <TextView
+            android:id="@+id/no_tickets"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="32dp"
+            style="@style/AfishaTitle"
+            android:textColor="@color/text_color_50"
+            android:text="Список пуст" />
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/tickets_recycler"
             android:layout_below="@id/ticket_title"
